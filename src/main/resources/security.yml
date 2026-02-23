@@ -1,0 +1,37 @@
+public-paths:
+  - "/health"
+  - "/health/**"
+  - "/swagger-ui.html"
+  - "/swagger-ui/**"
+  - "/swagger-ui/index.html"
+  - "/v3/api-docs"
+  - "/v3/api-docs/**"
+  - "/favicon.ico"
+  - "/swagger-resources/**"          # às vezes o swagger-ui pede isso
+  - "/webjars/**"                    # springdoc/openapi usa webjars
+  - "/swagger-ui/"             # para cobrir base
+
+client-credentials:
+  description: "Valida x-client-id e x-client-secret para login/refresh"
+  allowed-paths:
+    - "/api/v1/auth/register-admin"
+
+onboarding:
+  description: "Valida API key apenas para endpoint de onboarding/admin"
+  required-paths:
+    - "/api/v1/auth/register-admin"
+
+jwt:
+  description: "Valida JWT em endpoints protegidos"
+  allowed-paths:
+    - "/api/v1/auth/login"
+    - "/api/v1/auth/register-admin"
+    - "/api/v1/auth/refresh"
+
+must-change-password:
+  description: "Aplica regra de must-change-password (necessário trocar a senha) após autenticação JWT"
+  allowed-paths:
+    - "/api/v1/auth/register-admin"
+    - "/api/v1/auth/change-password"
+    - "/api/v1/auth/login"
+    - "/api/v1/auth/logout"

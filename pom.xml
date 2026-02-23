@@ -99,14 +99,29 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin para criar JAR simples (NÃO usar spring-boot-maven-plugin) -->
+            <!-- Plugin para criar JAR simples -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
             </plugin>
 
-            <!-- Plugin para copiar dependências (opcional, útil para debug) -->
+            <!-- Plugin para gerar JAR com fontes (ajuda no debug) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin para copiar dependências -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>

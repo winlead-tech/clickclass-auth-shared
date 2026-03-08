@@ -12,6 +12,33 @@ java {
     withSourcesJar()
 }
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter:3.3.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security:3.3.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.3.0'
+    implementation 'org.springframework:spring-web:6.0.16'
+
+    // Jakarta Servlet
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.5'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.5'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -24,8 +51,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/winlead-tech/clickclass-auth-shared")
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME_GITHUB")
-                password = project.findProperty("gpr.token") ?: System.getenv("TOKEN_GITHUB")
+                username = "x-access-token"
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }

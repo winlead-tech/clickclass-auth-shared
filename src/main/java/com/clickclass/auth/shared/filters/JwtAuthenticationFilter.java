@@ -49,12 +49,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UUID userId = jwtTokenUtil.getUserIdFromToken(token);
             UUID escolaId = jwtTokenUtil.getEscolaIdFromToken(token);
 
-            JwtUserContext principal = new JwtUserContext(userId, escolaId);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(principal, null, Collections.emptyList());
+            JwtUserContext principal = new JwtUserContext(userId, escolaId, token);
+
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(principal, null, Collections.emptyList());
+
             SecurityContextHolder.getContext().setAuthentication(auth);
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
+            log.error("[JWT] Erro ao processar token", e);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error processing token");
         }
     }

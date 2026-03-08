@@ -2,7 +2,7 @@ name: Publish Maven Package
 
 on:
   release:
-    types: [published]       # Publica quando você cria uma release
+    types: [published]
   workflow_dispatch:
     inputs:
       version:
@@ -27,6 +27,9 @@ jobs:
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Usando versão: $VERSION"
+
+      - name: Torna gradlew executável
+        run: chmod +x gradlew
 
       - name: Set up JDK
         uses: actions/setup-java@v3

@@ -1,0 +1,42 @@
+name: Publish Maven Package
+
+on:
+  release:
+    types: [published]       # Publica quando você cria uma release
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão do pacote (ex: 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  publish-package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Resolver versão
+        id: resolve_version
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          if [ -z "$VERSION" ]; then
+            VERSION="${{ inputs.version }}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Usando versão: $VERSION"
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+
+      - name: Publish to GitHub Packages
+        run: ./gradlew publish -Pversion=${{ steps.resolve_version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

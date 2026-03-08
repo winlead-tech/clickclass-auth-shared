@@ -1,13 +1,16 @@
 plugins {
-    id 'java'
-    id 'maven-publish'
+    id("java")
+    id("maven-publish")
+    id("java-library")
 }
 
-group = 'com.winleadtech'
-version = project.hasProperty('version') ? project.version : '1.0.0'
-description = 'Pacote compartilhado de autenticação ClickClass'
+group = "com.clickclass.auth"
+version = project.hasProperty("version") ? project.version : "1.0.0"
+description = "Pacote compartilhado de autenticação ClickClass"
 
 java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     withJavadocJar()
     withSourcesJar()
 }
@@ -17,41 +20,36 @@ repositories {
 }
 
 dependencies {
-    // Spring Boot
-    implementation 'org.springframework.boot:spring-boot-starter:3.3.0'
-    implementation 'org.springframework.boot:spring-boot-starter-security:3.3.0'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.3.0'
-    implementation 'org.springframework:spring-web:6.0.16'
+    implementation("org.springframework.boot:spring-boot-starter-web:3.2.0")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.2.0")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.2.0")
 
-    // Jakarta Servlet
-    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-    // Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 
-    // Jackson
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.4'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.4'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.4'
+    implementation("org.yaml:snakeyaml:2.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.4")
+}
 
-    // JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
-    // SnakeYAML
-    implementation 'org.yaml:snakeyaml:2.2'
-
-    // Logging
-    implementation 'org.slf4j:slf4j-api:2.0.9'
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
 }
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifactId = 'clickclass-auth-shared'
+        create("mavenJava") {
+            from(components["java"])
+            artifactId = "clickclass-auth-shared"
+
+            pom {
+                name.set("ClickClass Auth Shared")
+                description.set("Pacote compartilhado de autenticação ClickClass")
+                url.set("https://github.com/winlead-tech/clickclass-auth-shared")
+            }
         }
     }
     repositories {
@@ -59,8 +57,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/winlead-tech/clickclass-auth-shared")
             credentials {
-                username = "x-access-token"
-                password = System.getenv("GITHUB_TOKEN")
+                username = "winlead-tech"
+                password = System.getenv("GITHUB_TOKEN") ?: ""
             }
         }
     }

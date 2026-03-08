@@ -1,4 +1,4 @@
-name: Publish Maven Package
+name: Publish Gradle Package
 
 on:
   release:
@@ -17,9 +17,6 @@ jobs:
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
-
-      - name: Verificar arquivos na raiz
-        run: ls -la
 
       - name: Resolver versão
         id: resolve_version
@@ -44,5 +41,6 @@ jobs:
 
       - name: Publish to GitHub Packages
         run: ./gradlew publish -Pversion=${{ steps.resolve_version.outputs.version }}
+        working-directory: ${{ github.workspace }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

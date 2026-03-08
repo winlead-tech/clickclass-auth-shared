@@ -18,6 +18,9 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
+      - name: Verificar arquivos na raiz
+        run: ls -la
+
       - name: Resolver versão
         id: resolve_version
         run: |
